@@ -1,0 +1,32 @@
+{
+    "name": "knight/armor",
+    "type": "library",
+    "description": "Knight PHP framework core",
+    "keywords": [
+        "ubyte",
+        "core",
+        "knight",
+        "framework"
+    ],
+    "homepage": "https://github.com/energia-source/knight-armor",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Paolo Fabris",
+            "email": "support@ubyte.it",
+            "homepage": "https://www.ubyte.it/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.3",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Knight\\": "src/"
+        }
+    }
+}
