@@ -7,6 +7,7 @@ use Closure;
 use Knight\Sso;
 use Knight\Configuration;
 
+use Knight\armor\Output;
 use Knight\armor\CustomException;
 
 class Navigator
@@ -93,15 +94,20 @@ class Navigator
 		return require_once $file;
     }
 
-    public static function exception(Closure $redirect = null) : void
+    public static function exception(Closure $callback = null) : void
     {
-        $redirect_url = static::getUrlWithQueryString();
-        if ($redirect !== null) $redirect_url = call_user_func($redirect, $redirect_url);
+        $url = static::getUrlWithQueryString();
+        if ($callback !== null) {
+            $callback_response = call_user_func($callback, $url);
+            if (filter_var($callback_response, FILTER_VALIDATE_URL)) $url = $callback_response;
+        }
 
         static::noCache();
 
+        if (array_key_exists(static::HTTP_ORIGIN, $_SERVER)) Output::print(false); 
+
         header('HTTP/1.1 301 Moved Permanently');
-        header('Location: ' . $redirect_url);
+        header('Location: ' . $url);
 
         exit;
     }

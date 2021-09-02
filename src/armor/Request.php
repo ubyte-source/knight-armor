@@ -6,31 +6,45 @@ class Request
 {
     protected function __construct() {}
 
-    public static function get(string $filter = null)
+    public static function filter(array $input) : array
     {
-        if ($filter === null) return (object)$_GET;
-        if (array_key_exists($filter, $_GET)) return $_GET[$filter];
+        $callback = array(static::class, 'callback');
+        $response = array();
+        foreach ($input as $key => $data) $response[$key] = is_array($data) ? static::filter($data) : $data;
+        $response = array_filter($response, $callback);
+        return $response;
+    }
+
+    public static function get(string $selector = null)
+    {
+        if ($selector === null) return (object)$_GET;
+        if (array_key_exists($selector, $_GET)) return $_GET[$selector];
         return null;
     }
 
-    public static function post(string $filter = null)
+    public static function post(string $selector = null)
     {
-        if ($filter === null) return (object)$_POST;
-        if (array_key_exists($filter, $_POST)) return $_POST[$filter];
+        if ($selector === null) return (object)$_POST;
+        if (array_key_exists($selector, $_POST)) return $_POST[$selector];
         return null;
     }
 
-    public static function header(string $filter = null)
+    public static function header(string $selector = null)
     {
         $header_keys = array_keys($_SERVER);
         $header_keys = preg_grep('/^http/i', $header_keys);
         $header_keys = array_flip($header_keys);
         $header = array_intersect_key($_SERVER, $header_keys);
-        if ($filter === null) return (object)$header;
+        if ($selector === null) return (object)$header;
 
-        $filter = 'http' . chr(95) . $filter;
-        $filter = strtoupper($filter);
-        if (array_key_exists($filter, $header)) return $header[$filter];
+        $selector = 'http' . chr(95) . $selector;
+        $selector = strtoupper($selector);
+        if (array_key_exists($selector, $header)) return $header[$selector];
         return null;
+    }
+
+    protected static function callback($item) : bool
+    {
+        return !is_null($item) && (!is_array($item) || !empty($item));
     }
 }
