@@ -6,6 +6,7 @@ use stdClass;
 
 use Knight\Configuration;
 
+use Knight\armor\Request;
 use Knight\armor\Navigator;
 use Knight\armor\CustomException;
 
@@ -41,10 +42,10 @@ class Curl
         $curl_response = curl_exec($curl);
         $curl_response_info = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         if (200 != $curl_response_info) throw new CustomException('developer/curl/' . $curl_response_info);
-        if (false === $this->getReturnJSON()) return $curl_response;
 
-        $curl_response_decoded = static::JSONDecode($curl_response);
-        return $curl_response_decoded;
+        return $this->getReturnJSON()
+            ? Request::JSONDecode($curl_response)
+            : $curl_response;
     }
 
     public function setHeader(string ...$header) : self
@@ -67,14 +68,5 @@ class Curl
     protected function getHeader() :? array
     {
         return $this->header;
-    }
-
-    protected static function JSONDecode(string $string)
-    {
-        $string_decoded = json_decode($string);
-        if (null === $string_decoded
-            && json_last_error() !== JSON_ERROR_NONE) throw new CustomException('developer/curl/json/decode');
-
-        return $string_decoded;
     }
 }

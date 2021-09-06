@@ -50,10 +50,9 @@ class Cipher
         return openssl_cipher_iv_length($method);
     }
 
-    public function encrypt(?string $plaintext) : string
+    public function encrypt(?string $plaintext) :? string
 	{
         if (null === $plaintext) return null;
-
         $method = $this->getMethod();
         $personal = $this->getKeyPersonal();
 

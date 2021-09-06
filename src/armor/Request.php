@@ -6,6 +6,15 @@ class Request
 {
     protected function __construct() {}
 
+    public static function JSONDecode(string $string)
+    {
+        $decode = json_decode($string);
+        if (null === $decode
+            && json_last_error() !== JSON_ERROR_NONE) throw new CustomException('developer/request/json/decode');
+
+        return $decode;
+    }
+
     public static function filter(array $input) : array
     {
         $callback = array(static::class, 'callback');
