@@ -46,6 +46,7 @@ class Request
         $header = array_intersect_key($_SERVER, $header_keys);
         if ($selector === null) return (object)$header;
 
+        $selector = preg_replace('/\W/', chr(95), $selector);
         $selector = 'http' . chr(95) . $selector;
         $selector = strtoupper($selector);
         if (array_key_exists($selector, $header)) return $header[$selector];
