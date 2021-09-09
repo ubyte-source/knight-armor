@@ -104,7 +104,8 @@ class Navigator
 
         static::noCache();
 
-        if (array_key_exists(static::HTTP_ORIGIN, $_SERVER)) Output::print(false); 
+        if (array_key_exists(static::HTTP_ORIGIN, $_SERVER)
+            || array_key_exists(static::HTTP_X_OVERRIDE_IP, $_SERVER)) Output::print(false); 
 
         header('HTTP/1.1 301 Moved Permanently');
         header('Location: ' . $url);
