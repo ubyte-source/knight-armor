@@ -13,6 +13,8 @@ class Output
 
     const CONFIGURATION_JSON_OPTION = 0x4718;
 
+    const APIDATA = 'data';
+
     protected static $data;          // Data
     protected static $json_override; // (int)
 
