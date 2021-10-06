@@ -8,9 +8,9 @@ class Request
 
     protected function __construct() {}
 
-    public static function JSONDecode(string $string)
+    public static function JSONDecode(string $string, int $flags = 0)
     {
-        $decode = json_decode($string, JSON_OBJECT_AS_ARRAY);
+        $decode = json_decode($string);
         if (null === $decode
             && json_last_error() !== JSON_ERROR_NONE) throw new CustomException('developer/request/json/decode');
 
@@ -45,7 +45,7 @@ class Request
         $input = file_get_contents('php://input');
         if (false === (bool)($flags & static::ISJSON)) return $input;
         if (is_string($input)) {
-            $input = static::JSONDecode($input);
+            $input = static::JSONDecode($input, JSON_OBJECT_AS_ARRAY);
             if ($selector === null) return (object)$input;
             if (array_key_exists($selector, $input))
                 return $input[$selector];
