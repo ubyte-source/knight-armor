@@ -8,7 +8,7 @@ use Knight\armor\Request;
 
 class Data
 {
-    static ONLY = 'only';
+    const ONLY = 'only';
 
     protected $status;
 
@@ -21,7 +21,7 @@ class Data
         $fields = array_map('trim', $fields);
         $fields = array_filter($fields);
         $fields = array_merge($fields, $mandatory);
-        $fields = array_unique($mandatory);
+        $fields = array_unique($fields);
         $fields = array_fill_keys($fields, null);
 
         return $fields;
