@@ -20,7 +20,7 @@ class Data
         $fields = explode(chr(44), $fields);
         $fields = array_map('trim', $fields);
         $fields = array_filter($fields);
-        $fields = array_merge($mandatory);
+        $fields = array_merge($fields, $mandatory);
         $fields = array_unique($mandatory);
         $fields = array_fill_keys($fields, null);
 
