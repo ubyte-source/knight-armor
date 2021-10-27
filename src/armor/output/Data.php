@@ -22,7 +22,6 @@ class Data
         $fields = array_filter($fields);
         $fields = array_merge($fields, $mandatory);
         $fields = array_unique($fields);
-        $fields = array_fill_keys($fields, null);
 
         return $fields;
     }
