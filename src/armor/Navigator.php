@@ -34,6 +34,7 @@ class Navigator
 
     const DEPTH_DEFAULT = 3;
 
+    const RETURN_URL = 'return_url';
 
     final protected function __construct() {}
 
