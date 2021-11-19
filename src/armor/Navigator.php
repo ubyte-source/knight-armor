@@ -16,7 +16,8 @@ class Navigator
 
     const CONFIGURATION_FORCE_IP = 0x1f4;
     const CONFIGURATION_DEPTH = 0x1f6;
-
+    
+    const QUERY_STRING = 'QUERY_STRING';
     const REQUEST_URI = 'REQUEST_URI';
     const REMOTE_ADDR = 'REMOTE_ADDR';
     const HTTP_HOST = 'HTTP_HOST';
