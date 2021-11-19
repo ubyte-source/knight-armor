@@ -15,7 +15,8 @@ class Cookie
     const CONFIGURATION_HTTP_ONLY = 0xc9;
     const CONFIGURATION_SUBDOMAIN = 0x7a508;
 
-    const ACTIVE = true; // (bool)
+    const ACTIVE = true;     // (bool)
+    const EXPIRY = 'expiry'; // (string) Name of querystring parameter
 
     final protected function __construct() {}
 
@@ -38,9 +39,9 @@ class Cookie
         $subdomain = static::getConfiguration(static::CONFIGURATION_SUBDOMAIN) ?? false;
         if (true !== $subdomain) return $_SERVER[Navigator::HTTP_HOST];
 
-        $domain = explode('.', $_SERVER[Navigator::HTTP_HOST]);
+        $domain = explode(chr(46), $_SERVER[Navigator::HTTP_HOST]);
         $domain = array_slice($domain, count($domain) - 2);
-        $domain = implode('.', $domain);
+        $domain = implode(chr(46), $domain);
         return $domain;
     }
 }
