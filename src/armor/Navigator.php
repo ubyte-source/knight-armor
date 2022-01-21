@@ -122,8 +122,10 @@ class Navigator
 
     public static function getClientIP(int $flags = 0) : int
     {
-        $ip = static::getConfiguration(static::CONFIGURATION_FORCE_IP) ?? $_SERVER[static::REMOTE_ADDR] ?? 0;
+        $ip = static::getConfiguration(static::CONFIGURATION_FORCE_IP);
+        if (null !== $ip) return ip2long($ip);
 
+        $ip = $_SERVER[static::REMOTE_ADDR] ?? 0;
         if (0 === $ip
             || !is_string($ip)) return 0;
 
