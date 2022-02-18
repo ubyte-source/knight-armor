@@ -19,39 +19,34 @@ trait Configuration
 		throw new CustomException('developer/configuration/require/' . $constant_name . '/' . $key);
 	}
 	
-	final protected static function getConfigurationFileName(?string $classname) : string
+	final protected static function getConfigurationClass(?string $classname) : string
 	{
-		if (is_string($classname)
-			&& !class_exists($classname)) return $classname;
-		
-		$reflection = new ReflectionClass(static::class);
+		if (is_string($classname) && false === class_exists($classname)) return $classname;
+		if (false === is_string($classname)) $classname = static::class;
+
+		$reflection = new ReflectionClass($classname);
 		$reflection_shortname = $reflection->getShortName();
 		return $reflection_shortname;
 	}
-	
+
 	final protected static function getConstant(?string $classname, string $constant_name) :? array
     {
-		$configuration_filename = static::getConfigurationFileName($classname);
-		$configuration_file = 'configurations' . '\\' . $configuration_filename;
-		if (!class_exists($configuration_file, true)) return null;
+		$configuration_class = static::getConfigurationClass($classname);
+		$configuration_class = '\\' . CONFIGURATIONS_FOLDER . '\\' . $configuration_class;
+		if (false === class_exists($configuration_class, true)) return null;
 
-		$configuration_file_reflection = new ReflectionClass($configuration_file);
-		$configuration_file_reflection_constants = $configuration_file_reflection->getConstants();
-		if (!array_key_exists($constant_name, $configuration_file_reflection_constants)) return null;
+		$configuration_class_reflection = new ReflectionClass($configuration_class);
+		$configuration_class_reflection_constants = $configuration_class_reflection->getConstants();
+		if (false === array_key_exists($constant_name, $configuration_class_reflection_constants)) return null;
 		
-		return $configuration_file_reflection_constants[$constant_name];
+		return $configuration_class_reflection_constants[$constant_name];
 	}
-	
+
 	final protected static function getConstantValue(?string $classname, string $constant_name, string $key)
     {
 		$configuration_constant = static::getConstant($classname, $constant_name);
 		if (null === $configuration_constant) return null;
         if (array_key_exists($key, $configuration_constant)) return $configuration_constant[$key];
         return null;
-	}
-
-	final protected static function getConfigurationNamespace() : string
-	{
-		return CONFIGURATIONS_FOLDER;
 	}
 }
