@@ -10,6 +10,8 @@ use Knight\Configuration;
 use Knight\armor\Output;
 use Knight\armor\CustomException;
 
+/* The Navigator class is used to determine the current route and to redirect to the appropriate view */
+
 class Navigator
 {
     use Configuration;
@@ -39,6 +41,12 @@ class Navigator
 
     final protected function __construct() {}
 
+    /**
+     * Get the URI from the server and split it into an array
+     * 
+     * @return An array of the URI segments.
+     */
+    
     public static function get() : array
     {
         $uri = $_SERVER[static::REQUEST_URI];
@@ -53,18 +61,36 @@ class Navigator
         return $uri;
     }
 
+    /**
+     * Returns the protocol (http or https) of the current request
+     * 
+     * @return The protocol (http or https) being used to access the application.
+     */
+    
     public static function getProtocol() : string
     {
         return isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'
             || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ? 'https' : 'http';
     }
 
+    /**
+     * Returns the URL of the current page
+     * 
+     * @return The URL of the current page.
+     */
+    
     public static function getUrl() : string
     {
         $protocol = static::getProtocol();
         return $protocol . '://' . $_SERVER[static::HTTP_HOST] . '/';
     }
 
+    /**
+     * Returns the URL with the query string attached
+     * 
+     * @return The URL with the query string.
+     */
+    
     public static function getUrlWithQueryString() : string
     {
         $url = static::getUrl();
@@ -72,6 +98,12 @@ class Navigator
         return $url . $_SERVER[static::REQUEST_URI];
     }
 
+    /**
+     * If the route is empty, load the dashboard. Otherwise, load the view
+     * 
+     * @return The correct file.
+     */
+    
     public static function view()
     {
         $route = self::get();
@@ -96,6 +128,12 @@ class Navigator
 		return require_once $file;
     }
 
+    /**
+     * If the request is a POST, then redirect to the URL that was passed in the POST
+     * 
+     * @param Closure callback A function that takes the URL as a parameter and returns a new URL.
+     */
+    
     public static function exception(Closure $callback = null) : void
     {
         $url = static::getUrlWithQueryString();
@@ -115,11 +153,25 @@ class Navigator
         exit;
     }
 
+    /**
+     * Get the depth of the tree
+     * 
+     * @return The depth of the tree.
+     */
+    
     public static function getDepth() : int
     {
         return static::getConfiguration(static::CONFIGURATION_DEPTH) ?? static::DEPTH_DEFAULT;
     }
 
+    /**
+     * Get the client IP address
+     * 
+     * @param int flags 
+     * 
+     * @return The IP address of the client.
+     */
+    
     public static function getClientIP(int $flags = 0) : int
     {
         $ip = static::getConfiguration(static::CONFIGURATION_FORCE_IP);
@@ -141,6 +193,12 @@ class Navigator
         return ip2long($ip);
     }
 
+    /**
+     * Get the user agent string from the  array
+     * 
+     * @return The user agent string.
+     */
+    
     public static function getUserAgent() : string
     {
         $user_agent = 'cli';
@@ -148,6 +206,12 @@ class Navigator
         return $user_agent;
     }
 
+    /**
+     * Send a no-cache header to the client
+     * 
+     * @return Nothing.
+     */
+    
     public static function noCache() : void
     {
         static $send;

@@ -6,6 +6,8 @@ use stdClass;
 
 use Knight\armor\CustomException;
 
+/* Get the lock file, parse it, and return the version of the library */
+
 class Composer
 {
     const DOCUMENT_ROOT = 'DOCUMENT_ROOT';
@@ -15,6 +17,15 @@ class Composer
 
     final protected function __construct() {}
 
+    /**
+     * Get the version of a package from the lock file
+     * 
+     * @param string name The name of the package.
+     * @param string library The name of the library to get the version for.
+     * 
+     * @return The version of the package.
+     */
+    
     public static function getLockVersion(string $name, string $library = null) : string
     {
         if (null !== $library) return $library;
@@ -30,6 +41,12 @@ class Composer
         throw new CustomException('developer/composer/lock/found');
     }
 
+    /**
+     * Read the lock file and return the contents as a PHP object
+     * 
+     * @return The lock file contents.
+     */
+    
     protected static function getLock() : stdClass
     {
         $baseroot = rtrim($_SERVER[static::DOCUMENT_ROOT], DIRECTORY_SEPARATOR);
@@ -48,6 +65,12 @@ class Composer
         return $lock_decoded;
     }
 
+    /**
+     * Get the packages from the lock file
+     * 
+     * @return An array of package names.
+     */
+    
     protected static function getLockPackages() : array
     {
         $memory_cache = null;

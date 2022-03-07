@@ -6,6 +6,8 @@ use Knight\Configuration;
 
 use Knight\armor\Navigator;
 
+/* The class is used to translate text */
+
 class Language
 {
     use Configuration;
@@ -18,18 +20,38 @@ class Language
 
     public static $speech;
 
+    /**
+     * It sets the speech for the current session.
+     * 
+     * @param speech The text to be spoken.
+     */
+    
     public static function setSpeech(?string $speech) : void
     {
         $instance = static::instance();
         if (null !== $speech) $instance::$speech = $speech;
     }
 
+    /**
+     * It returns the speech that was set in the constructor.
+     * 
+     * @return The speech property.
+     */
+    
     public static function getSpeech() :? string
     {
         $instance = static::instance();
         return $instance::$speech;
     }
 
+    /**
+     * If the file exists, require it
+     * 
+     * @param string filename The name of the file to be parsed.
+     * 
+     * @return Nothing.
+     */
+    
     public static function dictionary(string $filename) : bool
     {
         static $included;
@@ -54,6 +76,14 @@ class Language
         return true;
     }
 
+    /**
+     * It returns an array of all the text namespaces in the current PHP installation
+     * 
+     * @param string filter The filter is a string that is used to filter the results.
+     * 
+     * @return An array of arrays.
+     */
+    
     public static function getTextsNamespaceName(string $filter = '') : array
     {
         $defined = get_defined_constants(true);
@@ -92,6 +122,15 @@ class Language
         return $response;
     }
 
+    /**
+     * It takes a string and replaces any , , etc. with the corresponding value in the
+     *  array
+     * 
+     * @param string text The text to translate.
+     * 
+     * @return The translated text.
+     */
+    
     public static function translate(string $text, string ...$replace_attribute) : string
     {
         $instance = static::instance();
@@ -119,6 +158,15 @@ class Language
         return $text;
     }
 
+    /**
+     * If the language is set, return the value of the language key. If the language is not set, return
+     * the value of the default key. If neither key exists, return null
+     * 
+     * @param array input_associative The array to search for the key.
+     * 
+     * @return The value of the key that matches the language.
+     */
+    
     public static function array(array $input_associative) :? string
     {
         $instance = static::instance();
@@ -133,11 +181,19 @@ class Language
         return null;
     }
 
+    /**
+     * It returns the default speech for the question.
+     * 
+     * @return The default speech is being returned.
+     */
+    
     protected static function getDefaultSpeech() : string
     {
         return static::getConfiguration(static::CONFIGURATION_DEFAULT_SPEECH, true);
     }
-
+    
+    /* A constructor. */
+    
     final protected static function instance() : self
     {
         static $instance;
@@ -148,6 +204,12 @@ class Language
         return $instance;
     }
 
+    /**
+     * If the browser accepts a language, set the speech language to that language
+     * 
+     * @return The language code.
+     */
+    
     final protected function shouldSpeechBrowser() : void
     {
         if (!array_key_exists(Navigator::HTTP_ACCEPT_LANGUAGE, $_SERVER)) return;
