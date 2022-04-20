@@ -107,6 +107,7 @@ class Language
             $string_namespace = substr($string_namespace, $defined_filter_length);
             $string_namespace_exploded = explode('\\', $string_namespace);
             $string_namespace_key = array_pop($string_namespace_exploded);
+            if (!strlen((string)$string_namespace_key)) continue;
 
             $matrioska = &$response;
             foreach ($string_namespace_exploded as $part){
