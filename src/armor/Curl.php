@@ -29,7 +29,7 @@ class Curl
      * 
      * @return The response from the request.
      */
-    
+
     public function request(string $get, $post = null)
     {
         $curl = curl_init();
