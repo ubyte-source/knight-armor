@@ -40,15 +40,6 @@ trait Lock
 	}
 
 	/**
-	 * This function is used to prevent the developer from changing the state of the configuration object
-	 */
-	
-	final public function  __set_state()
-	{
-		throw new CustomException('developer/configuration/lock');
-	}
-
-	/**
 	 * *This function is called when a developer attempts to call a method that does not exist.*
 	 * 
 	 * The above function is called when a developer attempts to call a method that does not exist. 
@@ -71,6 +62,15 @@ trait Lock
 	 */
 	
 	final public function  __set(string $name, $arguments)
+	{
+		throw new CustomException('developer/configuration/lock');
+	}
+
+	/**
+	 * This function is used to prevent the developer from changing the state of the configuration object
+	 */
+	
+	final public static function  __set_state(array $array)
 	{
 		throw new CustomException('developer/configuration/lock');
 	}
