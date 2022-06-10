@@ -33,10 +33,10 @@ class Cookie
      * @return Nothing.
      */
     
-    public static function set(string $name, ?string $cookie_content, int $expiry = 0) : bool
+    public static function set(string $name, string $cookie_content, int $expiry = 0) : bool
     {
         $httponly = static::getConfiguration(static::CONFIGURATION_HTTP_ONLY);
-        if (setcookie($name, $cookie_content, $expiry, '/', static::getDomain(), static::getSecure(), true === $httponly)) return true;
+        if (setcookie($name, $cookie_content, $expiry, chr(47), static::getDomain(), static::getSecure(), true === $httponly)) return true;
 
         throw new CustomException('developer/cookie/set/content');
     }
