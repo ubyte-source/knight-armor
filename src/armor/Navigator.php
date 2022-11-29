@@ -183,8 +183,10 @@ class Navigator
 
         if (array_key_exists(static::HTTP_CLIENT_IP, $_SERVER)) $ip = $_SERVER[static::HTTP_CLIENT_IP];
         if (array_key_exists(static::HTTP_X_FORWARDED_FOR, $_SERVER)) $ip = $_SERVER[static::HTTP_X_FORWARDED_FOR];
-        if (true === (bool)(static::HTTP_X_OVERRIDE_IP_ENABLE & $flags)
-            && array_key_exists(static::HTTP_X_OVERRIDE_IP, $_SERVER)) $ip = long2ip($_SERVER[static::HTTP_X_OVERRIDE_IP]);
+        if (true === (bool)(static::HTTP_X_OVERRIDE_IP_ENABLE & $flags) && array_key_exists(static::HTTP_X_OVERRIDE_IP, $_SERVER))
+            $ip = filter_var($_SERVER[static::HTTP_X_OVERRIDE_IP], FILTER_VALIDATE_IP)
+                ? $_SERVER[static::HTTP_X_OVERRIDE_IP]
+                : long2ip($_SERVER[static::HTTP_X_OVERRIDE_IP]);
 
         preg_match(static::REGULAR_EXPRESSION_IP_MATCH, $ip, $ip_match_result);
         $ip = reset($ip_match_result);
